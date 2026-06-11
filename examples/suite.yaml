@@ -1,0 +1,48 @@
+suite: demo-suite
+seed: 2
+holdout_fraction: 0.25
+max_holdout_reveals: 5
+
+tasks:
+  - id: capital-question
+    input: { topic: capital-question }
+    expect:
+      tools: [search]
+      mode: strict
+      max_tool_calls: 2
+      max_cost_usd: 0.002
+    checks:
+      - type: output_contains
+        value: Paris
+
+  - id: refund-order
+    input: { topic: refund, order_id: A-100 }
+    expect:
+      tools: [lookup_order, issue_refund]
+      mode: strict
+      args:
+        issue_refund: { order_id: A-100, amount: 49.99 }
+    checks:
+      - type: output_contains
+        value: refund
+
+  - id: summarize-meeting
+    input: { topic: summarize-file }
+    expect:
+      tools: [read_file]
+      mode: strict
+      args:
+        read_file: { path: notes/meeting.md }
+    checks:
+      - type: output_contains
+        value: roadmap
+
+  - id: simple-math
+    input: { topic: math }
+    expect:
+      tools: [calculator]
+      mode: strict
+      max_steps: 4
+    checks:
+      - type: output_contains
+        value: "391"

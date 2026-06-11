@@ -1,0 +1,13 @@
+__pycache__/
+*.pyc
+*.egg-info/
+build/
+dist/
+.venv/
+venv/
+.pytest_cache/
+results*.json
+baseline*.json
+agentdiff-report.md
+agentdiff-diff.json
+.agentdiff-state.json

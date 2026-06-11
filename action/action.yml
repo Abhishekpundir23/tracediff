@@ -1,0 +1,59 @@
+name: "agentdiff"
+description: "Run an agent eval suite and post a structural trajectory diff against a baseline."
+branding:
+  icon: "git-pull-request"
+  color: "purple"
+
+inputs:
+  suite:
+    description: "Path to the suite YAML/JSON"
+    required: true
+  agent:
+    description: "Agent entrypoint, e.g. my_agent:run"
+    required: true
+  baseline:
+    description: "Path to the baseline results.json (e.g. restored from cache or an artifact from main)"
+    required: true
+  repeats:
+    description: "Runs per task"
+    required: false
+    default: "1"
+  split:
+    description: "Suite split to run (dev|holdout|all)"
+    required: false
+    default: "dev"
+  fail-on:
+    description: "regressions | none"
+    required: false
+    default: "regressions"
+
+outputs:
+  results:
+    description: "Path to the new results.json"
+    value: ${{ steps.run.outputs.results }}
+  markdown:
+    description: "Path to the markdown diff report (post it as a PR comment)"
+    value: ${{ steps.diff.outputs.markdown }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: Install agentdiff
+      shell: bash
+      run: pip install agentdiff
+    - name: Run suite
+      id: run
+      shell: bash
+      run: |
+        agentdiff run --suite "${{ inputs.suite }}" --agent "${{ inputs.agent }}" \
+          --split "${{ inputs.split }}" --repeats "${{ inputs.repeats }}" \
+          --out agentdiff-results.json
+        echo "results=agentdiff-results.json" >> "$GITHUB_OUTPUT"
+    - name: Diff against baseline
+      id: diff
+      shell: bash
+      run: |
+        agentdiff diff "${{ inputs.baseline }}" agentdiff-results.json \
+          --md agentdiff-report.md --json agentdiff-diff.json \
+          --fail-on "${{ inputs.fail-on }}"
+        echo "markdown=agentdiff-report.md" >> "$GITHUB_OUTPUT"
