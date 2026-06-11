@@ -1,0 +1,31 @@
+suite: claude-agent-real
+seed: 1
+holdout_fraction: 0.0
+
+tasks:
+  - id: summarize-meeting
+    input:
+      prompts:
+        a: "Read the file notes/meeting.md and summarize it in one sentence."
+        b: "Look around for any notes in this project, then summarize the meeting notes in one sentence."
+    expect:
+      tools: [Read]
+      mode: subset
+      max_tool_calls: 2
+      max_cost_usd: 0.05
+    checks:
+      - type: output_regex
+        value: "(?i)(roadmap|Q3)"
+
+  - id: no-tools-arithmetic
+    input:
+      prompts:
+        a: "What is 17 multiplied by 23? Reply with only the number."
+        b: "What is 17 multiplied by 23? Reply with only the number."
+    expect:
+      tools: []
+      mode: strict
+      max_cost_usd: 0.03
+    checks:
+      - type: output_contains
+        value: "391"

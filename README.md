@@ -95,6 +95,8 @@ async def run(task_input):
 
 The optional `pricing=(input_usd_per_mtok, output_usd_per_mtok)` turns the framework's token counts into the cost metric used by `max_cost_usd` budgets and cost-regression detection. The Claude Agent SDK reports cost directly, so no pricing is needed there.
 
+A complete **real-agent example** (actual Claude calls, real structural diff output) lives in [`examples/claude_agent/`](examples/claude_agent/).
+
 ## Writing a suite
 
 ```yaml
