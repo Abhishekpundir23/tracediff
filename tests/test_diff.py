@@ -1,4 +1,4 @@
-from agentdiff.diff import compare
+from tracediff.diff import compare
 
 
 def _task_result(
@@ -20,7 +20,7 @@ def _task_result(
 
 def _results(tasks, suite_hash="abc123"):
     return {
-        "agentdiff_version": "0.1.0",
+        "tracediff_version": "0.1.0",
         "suite": "s",
         "suite_hash": suite_hash,
         "split": "dev",

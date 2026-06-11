@@ -1,6 +1,6 @@
 import pytest
 
-from agentdiff.suite import HoldoutBudgetExceeded, load_suite, record_holdout_reveal
+from tracediff.suite import HoldoutBudgetExceeded, load_suite, record_holdout_reveal
 
 SUITE_YAML = """
 suite: test-suite

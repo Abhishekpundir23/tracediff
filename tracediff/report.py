@@ -81,7 +81,7 @@ def render_diff_text(diff: dict[str, Any]) -> str:
 
 def render_diff_markdown(diff: dict[str, Any]) -> str:
     header = (
-        f"## agentdiff: `{diff['suite']}` (version `{diff['suite_hash']}`, "
+        f"## tracediff: `{diff['suite']}` (version `{diff['suite_hash']}`, "
         f"split `{diff['split']}`)\n"
     )
     return header + "\n".join(_diff_lines(diff, markdown=True))

@@ -1,8 +1,8 @@
-"""agentdiff CLI.
+"""tracediff CLI.
 
-  agentdiff run   --suite suite.yaml --agent module:fn [--split dev] [--repeats 3] --out results.json
-  agentdiff diff  baseline.json current.json [--md comment.md] [--fail-on regressions|none]
-  agentdiff suite suite.yaml            # inspect version hash and split
+  tracediff run   --suite suite.yaml --agent module:fn [--split dev] [--repeats 3] --out results.json
+  tracediff diff  baseline.json current.json [--md comment.md] [--fail-on regressions|none]
+  tracediff suite suite.yaml            # inspect version hash and split
 
 Exit codes: `run` exits 0 once results are written (results are data, not a
 verdict); `diff` exits 1 when regressions are found and --fail-on is
@@ -16,11 +16,11 @@ import json
 import sys
 from pathlib import Path
 
-from agentdiff import __version__
-from agentdiff.diff import compare
-from agentdiff.report import render_diff_markdown, render_diff_text, render_run_text
-from agentdiff.runner import load_agent, run_suite
-from agentdiff.suite import HoldoutBudgetExceeded, load_suite, record_holdout_reveal
+from tracediff import __version__
+from tracediff.diff import compare
+from tracediff.report import render_diff_markdown, render_diff_text, render_run_text
+from tracediff.runner import load_agent, run_suite
+from tracediff.suite import HoldoutBudgetExceeded, load_suite, record_holdout_reveal
 
 
 def _cmd_run(args: argparse.Namespace) -> int:
@@ -83,10 +83,10 @@ def _cmd_suite(args: argparse.Namespace) -> int:
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
-        prog="agentdiff",
+        prog="tracediff",
         description="Structural trajectory regression testing for AI agents.",
     )
-    parser.add_argument("--version", action="version", version=f"agentdiff {__version__}")
+    parser.add_argument("--version", action="version", version=f"tracediff {__version__}")
     sub = parser.add_subparsers(dest="command", required=True)
 
     run_p = sub.add_parser("run", help="run an agent over a suite split and write results JSON")

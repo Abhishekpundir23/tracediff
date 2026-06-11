@@ -200,7 +200,7 @@ def compare(
         "suite": current.get("suite"),
         "suite_hash": current.get("suite_hash"),
         "split": current.get("split"),
-        "baseline_version": baseline.get("agentdiff_version"),
+        "baseline_version": baseline.get("tracediff_version"),
         "warnings": warnings,
         "tasks_added": sorted(cur_tasks.keys() - base_tasks.keys()),
         "tasks_removed": sorted(base_tasks.keys() - cur_tasks.keys()),

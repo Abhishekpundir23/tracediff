@@ -19,8 +19,8 @@ import re
 from collections import Counter
 from typing import Any
 
-from agentdiff.suite import Task
-from agentdiff.trace import Trace
+from tracediff.suite import Task
+from tracediff.trace import Trace
 
 MATCH_MODES = ("strict", "unordered", "subset")
 

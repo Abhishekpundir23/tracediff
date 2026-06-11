@@ -1,6 +1,6 @@
-from agentdiff.scoring import args_contain, evaluate, match_tool_sequence
-from agentdiff.suite import Task
-from agentdiff.trace import Step, Trace
+from tracediff.scoring import args_contain, evaluate, match_tool_sequence
+from tracediff.suite import Task
+from tracediff.trace import Step, Trace
 
 
 def _trace(tools, output="ok", cost=0.0, extra_steps=0):

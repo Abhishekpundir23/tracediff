@@ -1,8 +1,8 @@
-# agentdiff
+# tracediff
 
 **Structural trajectory regression testing for AI agents.** Diff what your agent *did*, not just its score.
 
-Every eval tool can tell you "accuracy dropped 3%." agentdiff tells you *why*:
+Every eval tool can tell you "accuracy dropped 3%." tracediff tells you *why*:
 
 ```
 2 regression(s), 1 cost regression(s), 1 behavior change(s) across 4 task(s)
@@ -23,15 +23,15 @@ That third one is the kind of bug that never shows up in a score: the agent stil
 ## Why
 
 - **Scores hide behavior.** Pass/fail diffs and LLM-judge verdicts can't tell you "step 4's tool args drifted between commits."
-- **Agents are stochastic.** A single run is a sample, not a measurement. agentdiff runs repeats and reports variance, so you can tell drift from noise.
+- **Agents are stochastic.** A single run is a sample, not a measurement. tracediff runs repeats and reports variance, so you can tell drift from noise.
 - **Cost is a first-class metric.** Research (Kapoor et al., NeurIPS 2024) showed accuracy-only evals reward agents that cost 50x more for the same results.
-- **Benchmarks leak.** Most agent benchmarks have no holdout discipline. agentdiff suites have a built-in dev/holdout split with a *reveal budget* — evaluating the holdout more than N times per suite version requires an explicit, recorded override.
-- **BYOK by construction.** agentdiff never calls a model provider. Your agent runs with your keys; agentdiff scores the traces.
+- **Benchmarks leak.** Most agent benchmarks have no holdout discipline. tracediff suites have a built-in dev/holdout split with a *reveal budget* — evaluating the holdout more than N times per suite version requires an explicit, recorded override.
+- **BYOK by construction.** tracediff never calls a model provider. Your agent runs with your keys; tracediff scores the traces.
 
 ## Install
 
 ```bash
-pip install agentdiff
+pip install tracediff
 ```
 
 ## Quickstart (60 seconds, no API keys)
@@ -39,14 +39,14 @@ pip install agentdiff
 The repo ships a deterministic demo agent. Run the baseline, "change the code" (set an env var), re-run, and diff:
 
 ```bash
-git clone https://github.com/Abhishekpundir23/agentdiff && cd agentdiff/examples
+git clone https://github.com/Abhishekpundir23/tracediff && cd tracediff/examples
 
-agentdiff run --suite suite.yaml --agent demo_agent:run --repeats 3 --out baseline.json
+tracediff run --suite suite.yaml --agent demo_agent:run --repeats 3 --out baseline.json
 
 # simulate a code change that subtly breaks the agent
-AGENTDIFF_DEMO_VARIANT=b agentdiff run --suite suite.yaml --agent demo_agent:run --repeats 3 --out current.json
+TRACEDIFF_DEMO_VARIANT=b tracediff run --suite suite.yaml --agent demo_agent:run --repeats 3 --out current.json
 
-agentdiff diff baseline.json current.json --md report.md
+tracediff diff baseline.json current.json --md report.md
 ```
 
 ## Wiring up your agent
@@ -62,7 +62,7 @@ def run(task_input):
 
 Accepted return shapes:
 1. **OpenAI-style message list** (assistant `tool_calls` + tool-role results) — works directly with most frameworks' message history.
-2. **`agentdiff.Trace`** — build it natively for full control (per-step tokens/cost).
+2. **`tracediff.Trace`** — build it natively for full control (per-step tokens/cost).
 3. **Serialized dict** — `{"steps": [...], "final_output": "..."}`.
 
 ## Writing a suite
@@ -91,15 +91,15 @@ tasks:
 The suite **version is a content hash** — edit any task and you get a new version. Diffs warn when results from different suite versions are compared, and each new version gets a fresh holdout budget.
 
 ```bash
-agentdiff suite suite.yaml      # inspect version hash + dev/holdout split
-agentdiff run --suite suite.yaml --agent my_agent:run --split holdout   # budgeted
+tracediff suite suite.yaml      # inspect version hash + dev/holdout split
+tracediff run --suite suite.yaml --agent my_agent:run --split holdout   # budgeted
 ```
 
 ## CI: structural diffs on every PR
 
 ```yaml
-# .github/workflows/agentdiff.yml
-name: agentdiff
+# .github/workflows/tracediff.yml
+name: tracediff
 on: pull_request
 
 jobs:
@@ -114,13 +114,13 @@ jobs:
 
       # restore the baseline produced on main (artifact, cache, or committed file)
       - name: Restore baseline
-        run: cp .agentdiff/baseline.json baseline.json
+        run: cp .tracediff/baseline.json baseline.json
 
       - name: Run + diff
         run: |
-          pip install agentdiff
-          agentdiff run --suite evals/suite.yaml --agent my_agent:run --repeats 3 --out current.json
-          agentdiff diff baseline.json current.json --md report.md   # exits 1 on regressions
+          pip install tracediff
+          tracediff run --suite evals/suite.yaml --agent my_agent:run --repeats 3 --out current.json
+          tracediff diff baseline.json current.json --md report.md   # exits 1 on regressions
 
       - name: Comment on PR
         if: always()

@@ -3,13 +3,13 @@ requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "agentdiff"
+name = "tracediff"
 version = "0.1.0"
 description = "Structural trajectory regression testing for AI agents - diff what your agent did, not just its score."
 readme = "README.md"
 requires-python = ">=3.10"
 license = { text = "Apache-2.0" }
-authors = [{ name = "agentdiff contributors" }]
+authors = [{ name = "tracediff contributors" }]
 keywords = ["ai", "agents", "evaluation", "testing", "ci", "llm", "trajectory"]
 classifiers = [
     "Development Status :: 3 - Alpha",
@@ -24,7 +24,7 @@ dependencies = ["pyyaml>=6.0"]
 dev = ["pytest>=8.0"]
 
 [project.scripts]
-agentdiff = "agentdiff.cli:main"
+tracediff = "tracediff.cli:main"
 
 [tool.setuptools.packages.find]
-include = ["agentdiff*"]
+include = ["tracediff*"]

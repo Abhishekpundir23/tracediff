@@ -8,6 +8,6 @@ venv/
 .pytest_cache/
 results*.json
 baseline*.json
-agentdiff-report.md
-agentdiff-diff.json
-.agentdiff-state.json
+tracediff-report.md
+tracediff-diff.json
+.tracediff-state.json

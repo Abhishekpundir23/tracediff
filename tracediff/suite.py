@@ -23,7 +23,7 @@ import yaml
 
 DEFAULT_HOLDOUT_FRACTION = 0.25
 DEFAULT_MAX_HOLDOUT_REVEALS = 5
-STATE_FILENAME = ".agentdiff-state.json"
+STATE_FILENAME = ".tracediff-state.json"
 
 
 class HoldoutBudgetExceeded(RuntimeError):

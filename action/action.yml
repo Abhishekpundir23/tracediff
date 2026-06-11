@@ -1,4 +1,4 @@
-name: "agentdiff"
+name: "tracediff"
 description: "Run an agent eval suite and post a structural trajectory diff against a baseline."
 branding:
   icon: "git-pull-request"
@@ -38,22 +38,22 @@ outputs:
 runs:
   using: "composite"
   steps:
-    - name: Install agentdiff
+    - name: Install tracediff
       shell: bash
-      run: pip install agentdiff
+      run: pip install tracediff
     - name: Run suite
       id: run
       shell: bash
       run: |
-        agentdiff run --suite "${{ inputs.suite }}" --agent "${{ inputs.agent }}" \
+        tracediff run --suite "${{ inputs.suite }}" --agent "${{ inputs.agent }}" \
           --split "${{ inputs.split }}" --repeats "${{ inputs.repeats }}" \
-          --out agentdiff-results.json
-        echo "results=agentdiff-results.json" >> "$GITHUB_OUTPUT"
+          --out tracediff-results.json
+        echo "results=tracediff-results.json" >> "$GITHUB_OUTPUT"
     - name: Diff against baseline
       id: diff
       shell: bash
       run: |
-        agentdiff diff "${{ inputs.baseline }}" agentdiff-results.json \
-          --md agentdiff-report.md --json agentdiff-diff.json \
+        tracediff diff "${{ inputs.baseline }}" tracediff-results.json \
+          --md tracediff-report.md --json tracediff-diff.json \
           --fail-on "${{ inputs.fail-on }}"
-        echo "markdown=agentdiff-report.md" >> "$GITHUB_OUTPUT"
+        echo "markdown=tracediff-report.md" >> "$GITHUB_OUTPUT"

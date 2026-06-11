@@ -23,10 +23,10 @@ jobs:
       - name: Demo smoke test (run + diff end to end)
         working-directory: examples
         run: |
-          agentdiff run --suite suite.yaml --agent demo_agent:run --repeats 2 --out baseline.json
-          AGENTDIFF_DEMO_VARIANT=b agentdiff run --suite suite.yaml --agent demo_agent:run --repeats 2 --out current.json
+          tracediff run --suite suite.yaml --agent demo_agent:run --repeats 2 --out baseline.json
+          TRACEDIFF_DEMO_VARIANT=b tracediff run --suite suite.yaml --agent demo_agent:run --repeats 2 --out current.json
           # the demo variant intentionally regresses, so diff must exit 1
-          if agentdiff diff baseline.json current.json --md report.md; then
+          if tracediff diff baseline.json current.json --md report.md; then
             echo "expected regressions to be detected" && exit 1
           fi
           cat report.md

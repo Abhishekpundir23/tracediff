@@ -1,6 +1,6 @@
 import pytest
 
-from agentdiff.trace import Trace, from_openai_messages, normalize_trace
+from tracediff.trace import Trace, from_openai_messages, normalize_trace
 
 
 def test_openai_adapter_extracts_tools_results_and_output():

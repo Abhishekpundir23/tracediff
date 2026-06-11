@@ -2,7 +2,7 @@
 
 The agent contract is one Python callable: it receives the task input and
 returns a trace in any supported shape (Trace, serialized dict, or an
-OpenAI-style message list). BYOK by construction - agentdiff never calls a
+OpenAI-style message list). BYOK by construction - tracediff never calls a
 model provider itself.
 
 Repeats are first-class because agents are stochastic: a single run is a
@@ -18,9 +18,9 @@ import traceback as tb
 from collections import Counter
 from typing import Any, Callable
 
-from agentdiff.scoring import evaluate
-from agentdiff.suite import Suite, Task
-from agentdiff.trace import normalize_trace
+from tracediff.scoring import evaluate
+from tracediff.suite import Suite, Task
+from tracediff.trace import normalize_trace
 
 
 def load_agent(entrypoint: str) -> Callable[[Any], Any]:
@@ -78,7 +78,7 @@ def run_suite(
     repeats: int = 1,
     progress: Callable[[str], None] | None = None,
 ) -> dict[str, Any]:
-    from agentdiff import __version__
+    from tracediff import __version__
 
     tasks = suite.split(split)
     if not tasks:
@@ -94,7 +94,7 @@ def run_suite(
 
     pass_rates = [r["pass_rate"] for r in results.values()]
     return {
-        "agentdiff_version": __version__,
+        "tracediff_version": __version__,
         "suite": suite.name,
         "suite_hash": suite.content_hash,
         "split": split,

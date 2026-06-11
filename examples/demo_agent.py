@@ -1,9 +1,9 @@
 """A deterministic offline demo agent (no API keys needed).
 
 It fakes an LLM agent that answers tasks via tool calls, returning
-OpenAI-style messages. Set AGENTDIFF_DEMO_VARIANT=b to simulate a "code
+OpenAI-style messages. Set TRACEDIFF_DEMO_VARIANT=b to simulate a "code
 change" that alters the agent's behavior - the README walkthrough diffs
-variant a (baseline) against variant b to show what agentdiff catches:
+variant a (baseline) against variant b to show what tracediff catches:
 an extra search loop, drifted read_file args, a cost increase, and one
 outright wrong answer.
 """
@@ -26,7 +26,7 @@ def _tool_result(call_id, content):
 
 
 def run(task_input):
-    variant = os.environ.get("AGENTDIFF_DEMO_VARIANT", "a")
+    variant = os.environ.get("TRACEDIFF_DEMO_VARIANT", "a")
     topic = task_input.get("topic") if isinstance(task_input, dict) else str(task_input)
 
     if topic == "capital-question":

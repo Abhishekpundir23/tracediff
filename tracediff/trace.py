@@ -1,6 +1,6 @@
 """Normalized trace model and ingestion adapters.
 
-A Trace is the unit agentdiff scores and diffs: an ordered list of Steps an
+A Trace is the unit tracediff scores and diffs: an ordered list of Steps an
 agent took while solving one task, plus the final output it produced.
 
 Agents can return any of:
