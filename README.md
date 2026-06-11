@@ -1,5 +1,10 @@
 # tracediff
 
+[![tests](https://github.com/Abhishekpundir23/tracediff/actions/workflows/ci.yml/badge.svg)](https://github.com/Abhishekpundir23/tracediff/actions/workflows/ci.yml)
+[![PyPI](https://img.shields.io/pypi/v/tracediff)](https://pypi.org/project/tracediff/)
+[![Python](https://img.shields.io/pypi/pyversions/tracediff)](https://pypi.org/project/tracediff/)
+[![License](https://img.shields.io/badge/license-Apache--2.0-blue)](LICENSE)
+
 **Structural trajectory regression testing for AI agents.** Diff what your agent *did*, not just its score.
 
 Every eval tool can tell you "accuracy dropped 3%." tracediff tells you *why*:
@@ -64,6 +69,31 @@ Accepted return shapes:
 1. **OpenAI-style message list** (assistant `tool_calls` + tool-role results) — works directly with most frameworks' message history.
 2. **`tracediff.Trace`** — build it natively for full control (per-step tokens/cost).
 3. **Serialized dict** — `{"steps": [...], "final_output": "..."}`.
+
+### Framework adapters
+
+One-line conversion for the major agent frameworks — duck-typed, so tracediff has **no dependency** on any of them, and dict-serialized traces work too:
+
+```python
+from tracediff import from_langgraph, from_openai_agents, from_claude_agent_sdk
+
+# LangGraph / LangChain: pass the final state (or its messages list)
+def run(task_input):
+    state = graph.invoke({"messages": [("user", task_input["question"])]})
+    return from_langgraph(state, pricing=(3.0, 15.0))   # $/M input, $/M output tokens
+
+# OpenAI Agents SDK: pass the RunResult
+def run(task_input):
+    result = Runner.run_sync(agent, task_input["question"])
+    return from_openai_agents(result, pricing=(2.5, 10.0))
+
+# Claude Agent SDK: pass the collected message list
+async def run(task_input):
+    messages = [m async for m in query(prompt=task_input["question"])]
+    return from_claude_agent_sdk(messages)   # uses the SDK's own total_cost_usd
+```
+
+The optional `pricing=(input_usd_per_mtok, output_usd_per_mtok)` turns the framework's token counts into the cost metric used by `max_cost_usd` budgets and cost-regression detection. The Claude Agent SDK reports cost directly, so no pricing is needed there.
 
 ## Writing a suite
 
@@ -150,9 +180,10 @@ Plus: tools added/removed/replaced/reordered with positions, step-count drift, t
 
 ## Roadmap
 
-- v0.1 (this): trace ingestion, structural scoring + budgets, repeat variance, structural diff, CLI, CI action, holdout governance
-- v0.2: adapters for LangGraph / OpenAI Agents SDK / Claude Agent SDK trace exports, OpenTelemetry GenAI spans
-- v0.3: automated benchmark construction — generate decontaminated, holdout-split task suites from your domain
+- v0.1: trace ingestion, structural scoring + budgets, repeat variance, structural diff, CLI, CI action, holdout governance
+- v0.2 (this): adapters for LangGraph / OpenAI Agents SDK / Claude Agent SDK
+- v0.3: OpenTelemetry GenAI span ingestion; richer flakiness analysis
+- v0.4: automated benchmark construction — generate decontaminated, holdout-split task suites from your domain
 
 ## License
 
