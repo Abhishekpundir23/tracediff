@@ -1,0 +1,24 @@
+name: Bug report
+description: Something else is broken (scoring, diffing, CLI, CI action)
+labels: ["bug"]
+body:
+  - type: input
+    id: version
+    attributes:
+      label: tracediff version
+      placeholder: tracediff --version
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: What happened, and how to reproduce it
+      description: Commands run, suite snippet if relevant, and the output you got
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected instead
+    validations:
+      required: true

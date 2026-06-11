@@ -187,6 +187,10 @@ Plus: tools added/removed/replaced/reordered with positions, step-count drift, t
 - v0.3: OpenTelemetry GenAI span ingestion; richer flakiness analysis
 - v0.4: automated benchmark construction — generate decontaminated, holdout-split task suites from your domain
 
+## Feedback
+
+If tracediff mis-parses your traces or the diff misses a change you care about, that's exactly what shapes the roadmap — [file a trace-parsing issue](https://github.com/Abhishekpundir23/tracediff/issues/new/choose) (sanitized trace samples welcome) or [start a discussion](https://github.com/Abhishekpundir23/tracediff/discussions).
+
 ## License
 
 Apache-2.0

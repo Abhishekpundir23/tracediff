@@ -1,0 +1,31 @@
+name: Trace parsing problem
+description: tracediff mis-parsed or rejected a trace from your agent/framework
+labels: ["trace-parsing"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        These reports directly drive the adapter roadmap - thank you.
+        Please strip any secrets or sensitive content from the trace first.
+  - type: input
+    id: framework
+    attributes:
+      label: Framework / source of the trace
+      placeholder: e.g. LangGraph 0.4, OpenAI Agents SDK, custom loop
+    validations:
+      required: true
+  - type: textarea
+    id: trace
+    attributes:
+      label: Trace sample (sanitized)
+      description: The smallest trace (or message list) that reproduces the problem
+      render: json
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected tracediff to extract
+      placeholder: e.g. tool_sequence should be ['search', 'refund'] but it got []
+    validations:
+      required: true
